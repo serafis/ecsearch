@@ -6,6 +6,8 @@ import android.os.Environment;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 import com.aprinz.ecsearch.db.DbHelper;
 import com.opencsv.CSVReader;
@@ -13,11 +15,13 @@ import com.opencsv.CSVReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
+import java.util.Set;
 
 
 public class MainActivity extends Activity {
 
-    private static final String TAG = "ECSearch";
+    private static final String TAG = "MainActivity";
 
 
     @Override
@@ -54,6 +58,8 @@ public class MainActivity extends Activity {
         File dir = Environment.getExternalStorageDirectory();
         File yourFile = new File(dir, "/test2.csv");
 
+        Set<ErrorCode> ecs = new HashSet<ErrorCode>();
+
         DbHelper dbHelper = new DbHelper(getApplicationContext());
 
         CSVReader reader = null;
@@ -61,12 +67,21 @@ public class MainActivity extends Activity {
         try {
             reader = new CSVReader(new FileReader(yourFile), ';');
             while ((nextLine = reader.readNext()) != null) {
-                Log.d(TAG, nextLine[0] + " " + nextLine[2]);
-                ErrorCode ec = new ErrorCode(nextLine[1], nextLine[2]);
-                dbHelper.addRecord(ec);
+                Log.d(TAG, nextLine[0] + "/ " + nextLine[1]);
+                ErrorCode ec = new ErrorCode(nextLine[0], nextLine[1]);
+                ecs.add(ec);
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+        dbHelper.addRecords(ecs);
+    }
+
+    public void findEntry(View view) {
+        DbHelper dbHelper = new DbHelper(getApplicationContext());
+
+        EditText mEdit = (EditText)findViewById(R.id.search_string);
+
+        Log.d(TAG, "Hit it!!!" + dbHelper.findRecord(mEdit.getText().toString()).text);
     }
 }
