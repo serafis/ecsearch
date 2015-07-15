@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">ECSearch</string>
+
+    <string name="search_term">Suchbegriff</string>
+    <string name="action_settings">Import</string>
+    <string name="title_activity_load">LoadActivity</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_import">Import</string>
+</resources>
