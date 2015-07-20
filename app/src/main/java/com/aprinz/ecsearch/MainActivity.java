@@ -20,9 +20,7 @@ import java.util.Set;
 
 
 public class MainActivity extends Activity {
-
     private static final String TAG = "MainActivity";
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,11 +36,7 @@ public class MainActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-
 
         switch (id) {
             case R.id.action_import:
@@ -54,30 +48,12 @@ public class MainActivity extends Activity {
     }
 
     private void importStuff() {
-
         File dir = Environment.getExternalStorageDirectory();
-        File yourFile = new File(dir, "/test4.csv");
+        File file = new File(dir, "/test4.csv");
 
-        Set<ErrorCode> ecs = new HashSet<ErrorCode>();
-
+        Set<ErrorCode> ecs = Extractor.extract(file);
         DbHelper dbHelper = new DbHelper(getApplicationContext());
 
-        CSVReader reader = null;
-        String[] nextLine;
-        try {
-            reader = new CSVReader(new FileReader(yourFile), ';');
-            while ((nextLine = reader.readNext()) != null) {
-                Log.d(TAG, nextLine[0] + " / " + nextLine[1]  + " / " + nextLine[2]);
-                if(!nextLine[2].equals("Reserve")) {
-                    ErrorCode ec = new ErrorCode(nextLine[0], nextLine[1], nextLine[2], nextLine[3], nextLine[4], nextLine[5], nextLine[6]);
-                    ecs.add(ec);
-                } else {
-                    Log.d(TAG, nextLine[0] + " skipped");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
         dbHelper.addRecords(ecs);
     }
 
