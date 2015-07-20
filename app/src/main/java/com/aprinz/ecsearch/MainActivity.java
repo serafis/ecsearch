@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
     private void importStuff() {
 
         File dir = Environment.getExternalStorageDirectory();
-        File yourFile = new File(dir, "/test2.csv");
+        File yourFile = new File(dir, "/test4.csv");
 
         Set<ErrorCode> ecs = new HashSet<ErrorCode>();
 
@@ -67,9 +67,13 @@ public class MainActivity extends Activity {
         try {
             reader = new CSVReader(new FileReader(yourFile), ';');
             while ((nextLine = reader.readNext()) != null) {
-                Log.d(TAG, nextLine[0] + "/ " + nextLine[1]);
-                ErrorCode ec = new ErrorCode(nextLine[0], nextLine[1]);
-                ecs.add(ec);
+                Log.d(TAG, nextLine[0] + " / " + nextLine[1]  + " / " + nextLine[2]);
+                if(!nextLine[2].equals("Reserve")) {
+                    ErrorCode ec = new ErrorCode(nextLine[0], nextLine[1], nextLine[2], nextLine[3], nextLine[4], nextLine[5], nextLine[6]);
+                    ecs.add(ec);
+                } else {
+                    Log.d(TAG, nextLine[0] + " skipped");
+                }
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,6 +86,7 @@ public class MainActivity extends Activity {
 
         EditText mEdit = (EditText)findViewById(R.id.search_string);
 
-        Log.d(TAG, "Hit it!!!" + dbHelper.findRecord(mEdit.getText().toString()).text);
+        ErrorCode ec = dbHelper.findRecord(mEdit.getText().toString());
+
     }
 }

@@ -9,15 +9,13 @@ import android.util.Log;
 
 import com.aprinz.ecsearch.ErrorCode;
 
-import org.apache.commons.lang3.NotImplementedException;
-
 import java.util.Set;
 
 /**
  * Created by Alexander on 13.07.2015.
  */
 public class DbHelper extends SQLiteOpenHelper {
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
     public static final String DATABASE_NAME = "ecsearch.db";
     private static final String TAG = "DbHelper";
 
@@ -42,13 +40,27 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         try {
             database.beginTransaction();
-            String sql = "INSERT INTO " + DbContract.ErrorCodes.TABLE_NAME + " (" + DbContract.ErrorCodes.COLUMN_NAME_ENTRY_ID + ", " + DbContract.ErrorCodes.COLUMN_NAME_TEXT + ") VALUES (? ,?)";
+            String sql = "INSERT INTO " + DbContract.ErrorCodes.TABLE_NAME + " (" +
+                    DbContract.ErrorCodes.COLUMN_ENTRY_ID + ", " +
+                    DbContract.ErrorCodes.COLUMN_PRIORITY_NAME + ", " +
+                    DbContract.ErrorCodes.COLUMN_DRIVER_EVENT_DES + ", " +
+                    DbContract.ErrorCodes.COLUMN_S_ADVICE + ", " +
+                    DbContract.ErrorCodes.COLUMN_E_ADVICE + ", " +
+                    DbContract.ErrorCodes.COLUMN_MAINTENANCE_EVENT_DES + ", " +
+                    DbContract.ErrorCodes.COLUMN_REPAIR_TEXT +
+                    ") VALUES (? ,?, ?, ?, ?, ?, ?)";
             SQLiteStatement statement = database.compileStatement(sql);
 
             for (ErrorCode ec : ecs) {
                 statement.clearBindings();
                 statement.bindString(1, ec.id);
-                statement.bindString(2, ec.text);
+                statement.bindString(2, ec.pName);
+                statement.bindString(3, ec.driverEventDesc);
+                statement.bindString(4, ec.shortAdvice);
+                statement.bindString(5, ec.extendedAdvice);
+                statement.bindString(6, ec.maintenanceEventDesc);
+                statement.bindString(7, ec.repairText);
+
                 statement.executeInsert();
             }
             database.setTransactionSuccessful();
@@ -62,11 +74,21 @@ public class DbHelper extends SQLiteOpenHelper {
     public ErrorCode findRecord(String id) {
         SQLiteDatabase db = this.getReadableDatabase();
         String table = DbContract.ErrorCodes.TABLE_NAME;
-        String[] columnsToReturn = {DbContract.ErrorCodes.COLUMN_NAME_ENTRY_ID, DbContract.ErrorCodes.COLUMN_NAME_TEXT };
-        String selection = DbContract.ErrorCodes.COLUMN_NAME_ENTRY_ID+" =?";
-        String[] selectionArgs = { id }; // matched to "?" in selection
+        String[] columnsToReturn = {
+                DbContract.ErrorCodes.COLUMN_PRIORITY_NAME, DbContract.ErrorCodes.COLUMN_DRIVER_EVENT_DES,
+                DbContract.ErrorCodes.COLUMN_S_ADVICE, DbContract.ErrorCodes.COLUMN_E_ADVICE,
+                DbContract.ErrorCodes.COLUMN_MAINTENANCE_EVENT_DES, DbContract.ErrorCodes.COLUMN_REPAIR_TEXT};
+        String selection = DbContract.ErrorCodes.COLUMN_ENTRY_ID + " LIKE ?";
+        String[] selectionArgs = {id};
         Cursor dbCursor = db.query(table, columnsToReturn, selection, selectionArgs, null, null, null);
+
+        Log.w(TAG, "Size of Query: " + Integer.toString(dbCursor.getCount()));
+
         dbCursor.moveToFirst();
-        return new ErrorCode(dbCursor.getString(0), dbCursor.getString(1));
+
+        ErrorCode ec = new ErrorCode(id, dbCursor.getString(0), dbCursor.getString(1), dbCursor.getString(2), dbCursor.getString(3), dbCursor.getString(4), dbCursor.getString(5));
+        dbCursor.close();
+
+        return ec;
     }
 }
