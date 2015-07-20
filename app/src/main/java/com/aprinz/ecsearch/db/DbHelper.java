@@ -71,7 +71,7 @@ public class DbHelper extends SQLiteOpenHelper {
         }
     }
 
-    public ErrorCode findRecord(String id) {
+    public ErrorCode findRecord(String id) throws IllegalArgumentException {
         SQLiteDatabase db = this.getReadableDatabase();
         String table = DbContract.ErrorCodes.TABLE_NAME;
         String[] columnsToReturn = {
@@ -84,11 +84,14 @@ public class DbHelper extends SQLiteOpenHelper {
 
         Log.w(TAG, "Size of Query: " + Integer.toString(dbCursor.getCount()));
 
-        dbCursor.moveToFirst();
+        if (dbCursor.getCount() == 1) {
+            dbCursor.moveToFirst();
+            ErrorCode ec = new ErrorCode(id, dbCursor.getString(0), dbCursor.getString(1), dbCursor.getString(2), dbCursor.getString(3), dbCursor.getString(4), dbCursor.getString(5));
+            dbCursor.close();
+            return ec;
+        } else {
+            throw new IllegalArgumentException("Number of Matches: " + Integer.toString(dbCursor.getCount()));
+        }
 
-        ErrorCode ec = new ErrorCode(id, dbCursor.getString(0), dbCursor.getString(1), dbCursor.getString(2), dbCursor.getString(3), dbCursor.getString(4), dbCursor.getString(5));
-        dbCursor.close();
-
-        return ec;
     }
 }

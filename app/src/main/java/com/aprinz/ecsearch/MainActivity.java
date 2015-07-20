@@ -3,19 +3,16 @@ package com.aprinz.ecsearch;
 import android.app.Activity;
 import android.os.Bundle;
 import android.os.Environment;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Toast;
 
 import com.aprinz.ecsearch.db.DbHelper;
-import com.opencsv.CSVReader;
 
 import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -58,11 +55,21 @@ public class MainActivity extends Activity {
     }
 
     public void findEntry(View view) {
+
         DbHelper dbHelper = new DbHelper(getApplicationContext());
+        EditText mEdit = (EditText) findViewById(R.id.search_string);
+        try {
+            ErrorCode ec = dbHelper.findRecord(mEdit.getText().toString());
+            ListView yourListView = (ListView) findViewById(R.id.errorcode_content_list);
+            MyListAdapter customAdapter = new MyListAdapter(this, R.layout.activity_main, ec.getAsList());
+            yourListView.setAdapter(customAdapter);
+        } catch (IllegalArgumentException e) {
+            CharSequence text = "Search Failed! Probably not found";
+            int duration = Toast.LENGTH_SHORT;
+            Toast toast = Toast.makeText(getApplicationContext(), text, duration);
+            toast.show();
+        }
 
-        EditText mEdit = (EditText)findViewById(R.id.search_string);
-
-        ErrorCode ec = dbHelper.findRecord(mEdit.getText().toString());
 
     }
 }

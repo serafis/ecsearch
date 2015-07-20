@@ -7,7 +7,7 @@
 
     <EditText
         android:id="@+id/search_string"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="@string/search_term"
         android:inputType="text" />
@@ -20,5 +20,11 @@
         android:layout_width="wrap_content"
         android:text="@string/button_search"
         android:onClick="findEntry" />
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/errorcode_content_list"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/search_button"/>
 
 </RelativeLayout>

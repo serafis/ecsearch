@@ -1,5 +1,7 @@
 package com.aprinz.ecsearch;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -22,6 +24,20 @@ public class ErrorCode {
         this.extendedAdvice = extendedAdvice;
         this.maintenanceEventDesc = maintenanceEventDesc;
         this.repairText = repairText;
+    }
+
+    public List<Item> getAsList() {
+        List<Item> list = new ArrayList<Item>();
+
+        list.add(new Item("id", id));
+        list.add(new Item("pName", pName));
+        list.add(new Item("driverEventDesc", driverEventDesc));
+        list.add(new Item("shortAdvice", shortAdvice));
+        list.add(new Item("extendedAdvice", extendedAdvice));
+        list.add(new Item("maintenanceEventDesc", maintenanceEventDesc));
+        list.add(new Item("repairText", repairText));
+
+        return list;
     }
 
     @Override
