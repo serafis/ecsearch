@@ -2,7 +2,6 @@ package com.aprinz.ecsearch;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created by Alexander on 15.07.2015.
@@ -26,16 +25,26 @@ public class ErrorCode {
         this.repairText = repairText;
     }
 
+    public ErrorCode() {
+        this.id = "";
+        this.pName = "";
+        this.driverEventDesc = "";
+        this.shortAdvice = "";
+        this.extendedAdvice = "";
+        this.maintenanceEventDesc = "";
+        this.repairText = "";
+    }
+
     public List<Item> getAsList() {
         List<Item> list = new ArrayList<Item>();
 
-        list.add(new Item("id", id));
-        list.add(new Item("pName", pName));
-        list.add(new Item("driverEventDesc", driverEventDesc));
-        list.add(new Item("shortAdvice", shortAdvice));
-        list.add(new Item("extendedAdvice", extendedAdvice));
-        list.add(new Item("maintenanceEventDesc", maintenanceEventDesc));
-        list.add(new Item("repairText", repairText));
+        list.add(new Item("Fehlercode", id));
+        list.add(new Item("Priorität", pName));
+        list.add(new Item("Fehler Lokführer", driverEventDesc));
+        list.add(new Item("Abhilfetext v>0", shortAdvice));
+        list.add(new Item("Abhilfetext v=0", extendedAdvice));
+        list.add(new Item("Fehler Wekstatt", maintenanceEventDesc));
+        list.add(new Item("Abhilfetext Werkstatt", repairText));
 
         return list;
     }
@@ -44,18 +53,32 @@ public class ErrorCode {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+
         ErrorCode errorCode = (ErrorCode) o;
-        return Objects.equals(id, errorCode.id) &&
-                Objects.equals(pName, errorCode.pName) &&
-                Objects.equals(driverEventDesc, errorCode.driverEventDesc) &&
-                Objects.equals(shortAdvice, errorCode.shortAdvice) &&
-                Objects.equals(extendedAdvice, errorCode.extendedAdvice) &&
-                Objects.equals(maintenanceEventDesc, errorCode.maintenanceEventDesc) &&
-                Objects.equals(repairText, errorCode.repairText);
+
+        if (id != null ? !id.equals(errorCode.id) : errorCode.id != null) return false;
+        if (pName != null ? !pName.equals(errorCode.pName) : errorCode.pName != null) return false;
+        if (driverEventDesc != null ? !driverEventDesc.equals(errorCode.driverEventDesc) : errorCode.driverEventDesc != null)
+            return false;
+        if (shortAdvice != null ? !shortAdvice.equals(errorCode.shortAdvice) : errorCode.shortAdvice != null)
+            return false;
+        if (extendedAdvice != null ? !extendedAdvice.equals(errorCode.extendedAdvice) : errorCode.extendedAdvice != null)
+            return false;
+        if (maintenanceEventDesc != null ? !maintenanceEventDesc.equals(errorCode.maintenanceEventDesc) : errorCode.maintenanceEventDesc != null)
+            return false;
+        return !(repairText != null ? !repairText.equals(errorCode.repairText) : errorCode.repairText != null);
+
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, pName, driverEventDesc, shortAdvice, extendedAdvice, maintenanceEventDesc, repairText);
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (pName != null ? pName.hashCode() : 0);
+        result = 31 * result + (driverEventDesc != null ? driverEventDesc.hashCode() : 0);
+        result = 31 * result + (shortAdvice != null ? shortAdvice.hashCode() : 0);
+        result = 31 * result + (extendedAdvice != null ? extendedAdvice.hashCode() : 0);
+        result = 31 * result + (maintenanceEventDesc != null ? maintenanceEventDesc.hashCode() : 0);
+        result = 31 * result + (repairText != null ? repairText.hashCode() : 0);
+        return result;
     }
 }

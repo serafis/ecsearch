@@ -40,6 +40,17 @@ public class DbHelper extends SQLiteOpenHelper {
         SQLiteDatabase database = this.getWritableDatabase();
         try {
             database.beginTransaction();
+            String sql = DbContract.SQL_DELETE_ENTRIES;
+            SQLiteStatement statement = database.compileStatement(sql);
+            database.setTransactionSuccessful();
+        } catch (Exception e) {
+            Log.w(TAG, e);
+        } finally {
+            database.endTransaction();
+        }
+
+        try {
+            database.beginTransaction();
             String sql = "INSERT INTO " + DbContract.ErrorCodes.TABLE_NAME + " (" +
                     DbContract.ErrorCodes.COLUMN_ENTRY_ID + ", " +
                     DbContract.ErrorCodes.COLUMN_PRIORITY_NAME + ", " +

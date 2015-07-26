@@ -1,10 +1,13 @@
-package com.aprinz.ecsearch;
+package com.aprinz.ecsearch.extractor;
 
 import android.util.Log;
 
+import com.aprinz.ecsearch.ErrorCode;
 import com.opencsv.CSVReader;
 
+import java.io.CharArrayReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashSet;
@@ -17,13 +20,21 @@ public class Extractor {
     private static final String TAG = "Extractor";
 
     public static Set<ErrorCode> extract(File file) {
+        try {
+            return extract(new CSVReader(new FileReader(file), ';'));
+        } catch (FileNotFoundException e) {
+            throw new ExtractorException(e);
+        }
+    }
+
+    public static Set<ErrorCode> extract(String filecontent) {
+        return extract(new CSVReader(new CharArrayReader(filecontent.toCharArray()), ';'));
+    }
+
+    private static Set<ErrorCode> extract(CSVReader reader) {
         Set<ErrorCode> ecs = new HashSet<ErrorCode>();
-
-
-        CSVReader reader = null;
         String[] nextLine;
         try {
-            reader = new CSVReader(new FileReader(file), ';');
             while ((nextLine = reader.readNext()) != null) {
                 Log.d(TAG, nextLine[0] + " / " + nextLine[1] + " / " + nextLine[2]);
                 if (!nextLine[2].equals("Reserve")) {
@@ -34,7 +45,7 @@ public class Extractor {
                 }
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ExtractorException(e);
         }
         return ecs;
     }
