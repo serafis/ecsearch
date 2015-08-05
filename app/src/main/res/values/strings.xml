@@ -2,7 +2,9 @@
     <string name="app_name">Fehlercode BR 442</string>
 
     <string name="search_term">Suchbegriff</string>
+    <string name="search">Suche</string>
 
     <string name="button_search">Suchen</string>
+    <string name="button_cancel">Abbruch</string>
     <string name="action_import">Import</string>
 </resources>

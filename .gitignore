@@ -51,3 +51,4 @@ build/
 ###############
 ecsearch.db
 test4.csv
+app/src/main/assets/dbinit.csv

@@ -5,26 +5,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/search_string"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/search_term"
-        android:inputType="text" />
-
-    <Button
-        android:id="@+id/search_button"
-        android:layout_below="@id/search_string"
-        android:layout_alignParentRight="true"
-        android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:text="@string/button_search"
-        android:onClick="findEntry" />
 
     <ListView xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/errorcode_content_list"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/search_button"/>
+        android:layout_height="wrap_content">
+    </ListView>
 
 </RelativeLayout>
